@@ -30,17 +30,7 @@ export const auth = betterAuth({
   },
   database: drizzleAdapter(db, {
     provider: "pg",
-    usePlural: true,
-    schema: {
-      users: schema.usersTable,
-      sessions: schema.sessionsTable,
-      accounts: schema.accountsTable,
-      verifications: schema.verificationsTable,
-      subscriptions: schema.subscriptionsTable,
-      sessionRelations: schema.sessionRelations,
-      userRelations: schema.userRelations,
-      accountRelations: schema.accountRelations,
-    },
+    schema,
   }),
   trustedOrigins: [process.env.BETTER_AUTH_URL!],
   emailAndPassword: {
@@ -77,6 +67,7 @@ export const auth = betterAuth({
     admin(),
     expo(),
     stripe({
+      schema: { subscription: { modelName: "subscriptionsTable" } },
       stripeClient,
       stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
       createCustomerOnSignUp: true,
@@ -174,6 +165,7 @@ export const auth = betterAuth({
     }),
   ],
   user: {
+    modelName: "usersTable",
     additionalFields: {
       firstname: {
         type: "string",
@@ -202,11 +194,18 @@ export const auth = betterAuth({
     },
   },
   account: {
+    modelName: "accountsTable",
     accountLinking: {
       enabled: true,
       allowDifferentEmails: true,
       trustedProviders: ["google", "email-password"],
     },
+  },
+  session: {
+    modelName: "sessionsTable",
+  },
+  verification: {
+    modelName: "verificationsTable",
   },
 });
 

@@ -97,19 +97,19 @@ export const plansTable = pgTable("plans", {
 });
 
 export const userRelations = relations(usersTable, ({ many }) => ({
-  sessions: many(sessionsTable),
-  accounts: many(accountsTable),
+  sessionsTable: many(sessionsTable),
+  accountsTable: many(accountsTable),
 }));
 
 export const sessionRelations = relations(sessionsTable, ({ one }) => ({
-  users: one(usersTable, {
+  usersTable: one(usersTable, {
     fields: [sessionsTable.userId],
     references: [usersTable.id],
   }),
 }));
 
 export const accountRelations = relations(accountsTable, ({ one }) => ({
-  users: one(usersTable, {
+  usersTable: one(usersTable, {
     fields: [accountsTable.userId],
     references: [usersTable.id],
   }),
